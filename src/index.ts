@@ -122,6 +122,43 @@ function sso<T extends Data, C extends Compute = Compute>(
   if (!isObject(property)) {
     throw new Error('The input parameter must be an Object.');
   }
+  // Preserve state across hot updates
+  if (typeof module !== 'undefined' && 'hot' in module && module.hot) {
+    interface HotModule {
+      hot: {
+        data: { ssoStores?: Map<string, any> };
+        dispose: (callback: (data: { ssoStores?: Map<string, any> }) => void) => void;
+      };
+    }
+    // Use a stable storage container that survives hot updates
+    const hotStorage =
+      ((module as HotModule).hot.data && (module as HotModule).hot.data?.ssoStores) || new Map();
+
+    // Generate a unique key based on the initial property structure to identify this store
+    const storeKey = JSON.stringify(Object.keys(property).sort());
+
+    if (hotStorage.has(storeKey)) {
+      // Restore the previous state if it exists
+      const restoredState = hotStorage.get(storeKey);
+      // Merge the restored state with any new properties from the current property
+
+      for (const key in property) {
+        if (!(key in restoredState)) {
+          restoredState[key] = property[key];
+        }
+      }
+      property = restoredState;
+    } else {
+      // Initialize the storage with the current property
+      hotStorage.set(storeKey, property);
+    }
+
+    // Persist the storage in module.hot.data
+    if (!(module as HotModule).hot.data) {
+      (module as HotModule).hot.data = {};
+    }
+    (module as HotModule).hot.data.ssoStores = hotStorage;
+  }
   type Self = SSO<T, RecordWithReturn<C>>;
   let isInMethod = false;
   const config = { ...globalConfig };
