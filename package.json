@@ -1,6 +1,6 @@
 {
   "name": "shared-store-object",
-  "version": "1.4.3-beta.0",
+  "version": "1.4.3",
   "description": "Shared Store Object",
   "main": "lib/index.js",
   "scripts": {
