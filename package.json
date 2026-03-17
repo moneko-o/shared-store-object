@@ -43,7 +43,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/monako97/shared-store-object.git"
+    "url": "git+https://github.com/moneko-o/shared-store-object.git"
   },
   "keywords": [
     "shared-store-object",
@@ -55,7 +55,7 @@
   "author": "moneko",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/monako97/shared-store-object/issues"
+    "url": "https://github.com/moneko-o/shared-store-object/issues"
   },
-  "homepage": "https://github.com/monako97/shared-store-object#readme"
+  "homepage": "https://github.com/moneko-o/shared-store-object#readme"
 }
